@@ -1,7 +1,9 @@
 """Shared HACS elements."""
 import os
+from typing import TYPE_CHECKING
 
-from .base import HacsBase
+if TYPE_CHECKING:
+    from .base import HacsBase
 
 SHARE = {
     "hacs": None,
@@ -12,9 +14,9 @@ SHARE = {
 }
 
 
-def get_hacs() -> HacsBase:
+def get_hacs() -> "HacsBase":
     if SHARE["hacs"] is None:
-        from custom_components.hacs.hacsbase.hacs import Hacs as Legacy
+        from .hacsbase.hacs import Hacs as Legacy
 
         _hacs = Legacy()
 
@@ -24,24 +26,6 @@ def get_hacs() -> HacsBase:
         SHARE["hacs"] = _hacs
 
     return SHARE["hacs"]
-
-
-def get_factory():
-    if SHARE["factory"] is None:
-        from custom_components.hacs.operational.factory import HacsTaskFactory
-
-        SHARE["factory"] = HacsTaskFactory()
-
-    return SHARE["factory"]
-
-
-def get_queue():
-    if SHARE["queue"] is None:
-        from queueman import QueueManager
-
-        SHARE["queue"] = QueueManager()
-
-    return SHARE["queue"]
 
 
 def is_removed(repository):
